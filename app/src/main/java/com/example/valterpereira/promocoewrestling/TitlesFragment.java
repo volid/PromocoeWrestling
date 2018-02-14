@@ -4,11 +4,13 @@ package com.example.valterpereira.promocoewrestling;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.valterpereira.promocoewrestling.model.Cash;
@@ -55,13 +57,21 @@ public class TitlesFragment extends ListFragment {
         //mCallback.OnDetailsSelected(position, customAdapter.getItem(position), customAdapter);
 
         if (getActivity().findViewById(R.id.fragment_container) != null){
-        Toast.makeText(getActivity().getBaseContext(), "Clicked Portrait." + customAdapter.getItem(position).getName(),
-                Toast.LENGTH_SHORT).show();
+            DetailsFragment newFragment = new DetailsFragment();
+            Bundle args = new Bundle();
+            args.putInt("position", position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        else{
+            TextView article = (TextView) getActivity().findViewById(R.id.details_id);
+            article.setText(customAdapter.getItem(position).getDescription());
+        }
     }
-else{
-        Toast.makeText(getActivity().getBaseContext(), "Clicked Landscape." + customAdapter.getItem(position).getName(),
-                Toast.LENGTH_SHORT).show();
-    }   }
+
 
 
     private class FetchAsyncTask extends AsyncTask<String, Void, List<Promocao>> {
@@ -70,11 +80,12 @@ else{
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
+
         @Override
         protected List<Promocao> doInBackground(String... strings) {
             List<Promocao> promocoes = new ArrayList<>();
 
-            if(null != strings[0]) {
+            if (null != strings[0]) {
                 String urlString = strings[0];
                 try {
                     JSONArray jsonArray = new JSONArray(urlString);
@@ -88,8 +99,8 @@ else{
                         String image = jsonObject.optString("Image", "");
                         String website = jsonObject.optString("Website", "");
                         String location = jsonObject.optString("Location", "");
-                    Promocao promocao = new Promocao(name,description,image,website,location);
-                    promocoes.add(promocao);
+                        Promocao promocao = new Promocao(name, description, image, website, location);
+                        promocoes.add(promocao);
 
 
                     }
@@ -100,14 +111,13 @@ else{
             }
 
 
-
             return promocoes;
-    }
+        }
 
-    @Override
-    protected void onPostExecute(List<Promocao> promocoes) {
-        Cash.setList(promocoes);
-        customAdapter.updatePromocoes(promocoes);
+        @Override
+        protected void onPostExecute(List<Promocao> promocoes) {
+            Cash.setList(promocoes);
+            customAdapter.updatePromocoes(promocoes);
+        }
     }
-}
-}
+    }
