@@ -2,6 +2,7 @@ package com.example.valterpereira.promocoewrestling;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,17 +47,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (findViewById(R.id.fragment_container) != null) {
-
-            if (savedInstanceState != null) {
+            if (StatusCache.portrait != null) {
+                Toast.makeText(this, "The FragmentGeneral was already created", Toast.LENGTH_SHORT).show();
                 return;
             }
-            TitlesFragment firstFragment = new TitlesFragment();
-
-
-            firstFragment.setArguments(getIntent().getExtras());
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commit();
+            Toast.makeText(this, "Create new FragmentGeneral", Toast.LENGTH_SHORT).show();
+            setPortraitFragment(StatusCache.getPortrait());
+        }else {
+            if ((StatusCache.landscape != null) && (StatusCache.landscapeDet != null)) {
+                Toast.makeText(this, "The Fragments were already created", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Toast.makeText(this, "Create new Fragments", Toast.LENGTH_SHORT).show();
+            setLandscapeFragments(StatusCache.getLandscape1(), StatusCache.getLandscape2());
         }
+    }
+    private void setPortraitFragment(TitlesFragment titlefrag) {
+        titlefrag.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                titlefrag).commit();
+    }
+
+    private void setLandscapeFragments(TitlesFragment fragmentT, DetailsFragment fragmentD) {
+        fragmentT.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().add(R.id.titles_container,
+                fragmentT).commit();
+
+        fragmentD.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction().add(R.id.details_container,
+                fragmentD).commit();
     }
 }

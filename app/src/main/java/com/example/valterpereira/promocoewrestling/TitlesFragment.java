@@ -51,9 +51,18 @@ public class TitlesFragment extends ListFragment {
     }
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        Toast.makeText(getActivity(),customAdapter.getItem(position).getName(), Toast.LENGTH_SHORT).show();
+
         //mCallback.OnDetailsSelected(position, customAdapter.getItem(position), customAdapter);
+
+        if (getActivity().findViewById(R.id.fragment_container) != null){
+        Toast.makeText(getActivity().getBaseContext(), "Clicked Portrait." + customAdapter.getItem(position).getName(),
+                Toast.LENGTH_SHORT).show();
     }
+else{
+        Toast.makeText(getActivity().getBaseContext(), "Clicked Landscape." + customAdapter.getItem(position).getName(),
+                Toast.LENGTH_SHORT).show();
+    }   }
+
 
     private class FetchAsyncTask extends AsyncTask<String, Void, List<Promocao>> {
 

@@ -14,7 +14,7 @@ public class Cash {
         if (null == list) list = new ArrayList<>();
         return list;
     }
-    public static void setList(List<Promocao> list) {
-        list = list;
+    public static void setList(List<Promocao> list2) {
+        list = list2;
     }
 }
