@@ -6,7 +6,7 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
 
-    private static final String RESOURCE="[\n" +
+     static final String RESOURCE="[\n" +
             "\t{\n" +
             "\t\t\"Name\":\"Associação Portuguesa de Wrestling\",\n" +
             "\t\t\"Description\": \"Mais antiga promoção de wrestling do país.\",\n" +
@@ -44,5 +44,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (findViewById(R.id.fragment_container) != null) {
+
+            if (savedInstanceState != null) {
+                return;
+            }
+            TitlesFragment firstFragment = new TitlesFragment();
+
+
+            firstFragment.setArguments(getIntent().getExtras());
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
+        }
     }
 }
