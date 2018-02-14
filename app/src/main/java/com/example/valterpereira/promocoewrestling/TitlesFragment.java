@@ -1,6 +1,7 @@
 package com.example.valterpereira.promocoewrestling;
 
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,11 +30,24 @@ import java.util.List;
  */
 public class TitlesFragment extends ListFragment {
     static CustomAdapter customAdapter;
-
-    public TitlesFragment() {
+    private OnTitleSelectedListener mCallback;
+    public TitlesFragment()
+    {
         // Required empty public constructor
     }
-
+    public interface OnTitleSelectedListener {
+        void OnDetailsSelected(int position, Promocao promocoes, CustomAdapter customAdapter);
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallback = (OnTitleSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,22 +68,9 @@ public class TitlesFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
 
-        //mCallback.OnDetailsSelected(position, customAdapter.getItem(position), customAdapter);
+        mCallback.OnDetailsSelected(position, customAdapter.getItem(position), customAdapter);
 
-        if (getActivity().findViewById(R.id.fragment_container) != null){
-            DetailsFragment newFragment = new DetailsFragment();
-            Bundle args = new Bundle();
-            args.putInt("position", position);
-            newFragment.setArguments(args);
-            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-        else{
-            TextView article = (TextView) getActivity().findViewById(R.id.details_id);
-            article.setText(customAdapter.getItem(position).getDescription());
-        }
+
     }
 
 

@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
+import com.example.valterpereira.promocoewrestling.model.Promocao;
+
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        TitlesFragment.OnTitleSelectedListener {
 
 
      static final String RESOURCE="[\n" +
@@ -112,4 +116,31 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Não tem aplicações que suportem isto!", Toast.LENGTH_SHORT).show();
 
     }
+
+    @Override
+    public void OnDetailsSelected(int position, Promocao promocao, CustomAdapter customAdapter) {
+        if (findViewById(R.id.fragment_container) != null){
+            DetailsFragment newFragment = new DetailsFragment();
+            Bundle args = new Bundle();
+            args.putInt("position", position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+        else{
+            DetailsFragment newFragment = new DetailsFragment();
+            Bundle args = new Bundle();
+            args.putInt("position", position);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.details_container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+
+
+    }
+
 }
