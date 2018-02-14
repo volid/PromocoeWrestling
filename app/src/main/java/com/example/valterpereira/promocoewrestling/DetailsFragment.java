@@ -20,7 +20,7 @@ public class DetailsFragment extends Fragment {
 
 
     private View view;
-    private Promocao promocao;
+    static Promocao promocao;
 
     public DetailsFragment() {
         // Required empty public constructor

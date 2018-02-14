@@ -51,7 +51,8 @@
             android:id="@+id/gps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:text="Localizão"
+            android:onClick="getLocation"
             tools:layout_editor_absoluteX="267dp"
             tools:layout_editor_absoluteY="179dp" />
 
@@ -59,7 +60,8 @@
             android:id="@+id/website"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button"
+            android:text="Website"
+            android:onClick="getWebsite"
             tools:layout_editor_absoluteX="29dp"
             tools:layout_editor_absoluteY="188dp" />
     </LinearLayout>

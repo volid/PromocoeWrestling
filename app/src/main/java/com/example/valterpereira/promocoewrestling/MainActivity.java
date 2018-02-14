@@ -1,8 +1,16 @@
 package com.example.valterpereira.promocoewrestling;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,5 +84,32 @@ public class MainActivity extends AppCompatActivity {
         fragmentD.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.details_container,
                 fragmentD).commit();
+    }
+
+    public void getLocation(View view) {
+        String locationLabel = DetailsFragment.promocao.getName();
+        Uri location = Uri.parse("geo:" + DetailsFragment.promocao.getLocation() + "?q=" + DetailsFragment.promocao.getLocation() + "(" + locationLabel + ")");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
+
+        PackageManager manager = getPackageManager();
+        List<ResolveInfo> info = manager.queryIntentActivities(mapIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        if (info.size() > 0) {
+            startActivity(mapIntent);
+            return;
+        }
+        Toast.makeText(this, "Não tem aplicações que suportem isto!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void getWebsite(View view) {
+        Uri uri = Uri.parse(DetailsFragment.promocao.getWebsite());
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+        Intent chooser = Intent.createChooser(intent, "abrir com...");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(chooser);
+            return;
+        }
+        Toast.makeText(this, "Não tem aplicações que suportem isto!", Toast.LENGTH_SHORT).show();
+
     }
 }
